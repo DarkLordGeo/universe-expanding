@@ -99,10 +99,9 @@ function stepClock(dt: number): void {
   }
   if (clock.playing) {
     clock.goal += (clock.dir * clock.speed * dt) / FULL_RUN;
-    if (clock.goal >= 1 || clock.goal <= 0) {
-      clock.goal = Math.min(1, Math.max(0, clock.goal));
-      setPlaying(false);
-    }
+    // stop only on reaching the end we are heading towards
+    if ((clock.dir > 0 && clock.goal >= 1) || (clock.dir < 0 && clock.goal <= 0)) setPlaying(false);
+    clock.goal = Math.min(1, Math.max(0, clock.goal));
   }
   // the displayed time eases towards the requested time: scrubbing never pops
   clock.u += (clock.goal - clock.u) * (1 - Math.exp(-dt * 7));
